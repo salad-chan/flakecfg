@@ -63,6 +63,11 @@
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
+  
+  nix.settings = {
+    substituters = ["https://hyprland.cachix.org"];
+    trusted-public-keys = ["hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="];
+  };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -70,6 +75,16 @@
   #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
   #  wget
     kitty
+    dunst
+    pipewire
+    wireplumber
+    xdg-desktop-portal-hyprland
+    hyprpolkitagent
+    waybar
+    hyprpaper
+    wofi
+    wl-clipboard
+    libsForQt5.dolphin
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
