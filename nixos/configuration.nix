@@ -10,6 +10,11 @@
       ./hardware-configuration.nix
     ];
 
+  nix.settings = {
+    substituters = ["https://hyprland.cachix.org"];
+    trusted-public-keys = ["hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="];
+  };
+
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -63,17 +68,20 @@
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
-  
-  nix.settings = {
-    substituters = ["https://hyprland.cachix.org"];
-    trusted-public-keys = ["hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="];
-  };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
   #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
   #  wget
+  # Base
+    git
+    neovim
+  # Personal
+    firefox
+    obsidian
+    keepassxc
+  # Hyprland
     kitty
     dunst
     pipewire
@@ -85,6 +93,10 @@
     wofi
     wl-clipboard
     libsForQt5.dolphin
+    hypridle
+    hyprlock
+    hyprsunset
+    vesktop
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
