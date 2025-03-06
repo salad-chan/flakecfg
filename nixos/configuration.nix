@@ -77,26 +77,8 @@
   # Base
     git
     neovim
-  # Personal
-    firefox
-    obsidian
-    keepassxc
   # Hyprland
     kitty
-    dunst
-    pipewire
-    wireplumber
-    xdg-desktop-portal-hyprland
-    hyprpolkitagent
-    waybar
-    hyprpaper
-    wofi
-    wl-clipboard
-    libsForQt5.dolphin
-    hypridle
-    hyprlock
-    hyprsunset
-    vesktop
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -132,5 +114,11 @@
     package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
     # make sure to also set the portal package, so that they are in sync
     portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
+  };
+
+  nix.gc = {
+    automatic = true;  # Enable automatic garbage collection
+    dates = "weekly";  # Schedule (daily, weekly, or a cron expression)
+    options = "--delete-older-than 7d";  # Keep only the last 7 days of generations
   };
 }
