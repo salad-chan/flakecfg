@@ -121,4 +121,6 @@
     dates = "weekly";  # Schedule (daily, weekly, or a cron expression)
     options = "--delete-older-than 7d";  # Keep only the last 7 days of generations
   };
+
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 }
