@@ -18,7 +18,10 @@
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  
+
+  # AMD gpu driver
+  boot.initrd.kernelModules = [ "amdgpu" ];
+
   networking.hostName = "system"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
@@ -38,8 +41,7 @@
   i18n.extraLocaleSettings = {
     LC_ADDRESS = "en_US.UTF-8";
     LC_IDENTIFICATION = "en_US.UTF-8";
-    LC_MEASUREMENT = "en_US.UTF-8";
-    LC_MONETARY = "en_US.UTF-8";
+    LC_MEASUREMENT = "en_US.UTF-8"; LC_MONETARY = "en_US.UTF-8";
     LC_NAME = "en_US.UTF-8";
     LC_NUMERIC = "en_US.UTF-8";
     LC_PAPER = "en_US.UTF-8";
@@ -57,13 +59,13 @@
   users.users.user = {
     isNormalUser = true;
     description = "user";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "input" ];
     packages = with pkgs; [];
     initialHashedPassword = "$y$j9T$SbIfG.PMqcppUk8LBe1q9.$JSEjQHCANc3fBwDx92NhTP71lkurNUS9EUAPKRUHAD7";
   };
 
   users.users.root = {
-    initialHashedPassword = "$y$j9T$R8xRAlpGFI9cXhHnZ2fz91$Zd6x/a51Cwy.0jngpNj6dacepppeZwupWnEnOGEkFb6";
+    initialHashedPassword = "$y$j9T$Kk30oumJKar0YCVz7k3a3/$TzeX8MkGRGQffGoCc0YEYljCPX6bCermxeYQ5slWmGB";
   };
 
   # Allow unfree packages
@@ -76,10 +78,59 @@
   #  wget
   # Base
     git
-    neovim
+  # neovim # using NVF right now
+
   # Hyprland
     kitty
+
+  # Basic Hypr Eco system
+    dunst
+    pipewire
+    wireplumber
+    hyprpolkitagent
+
+  # Additions to hypr
+    rofi-wayland
+    copyq
+    kdePackages.dolphin
+    wl-clipboard
+
+  # utilities
+    hypridle
+    hyprlock
+    waybar
+    hyprcursor
+    hyprutils
+    hyprwayland-scanner
+    hyprland-qtutils
+    hyprgraphics
+    hyprsysteminfo
+    hyprsunset
+    hyprlang
+
+  # Screenshot utils
+    grim
+    slurp
+
+  # Fonts and etc.
+    font-awesome
+    nerd-fonts.zed-mono
+
+  # Sound GUI
+    pavucontrol
+
+  # User
+    firefox
+    keepassxc
+    obsidian
+    vesktop
+    zed-editor
+    vlc
+    qbittorrent
   ];
+
+  # Enabling Programs here instead of in packages
+  # stuff goes here
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -92,7 +143,7 @@
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
+  # services.openssh.enable = true;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
@@ -107,9 +158,11 @@
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "24.11"; # Did you read the comment?
-  
+
   programs.hyprland = {
     enable = true;
+    # I dont know if i need this
+    xwayland.enable = true;
     # set the flake package
     package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
     # make sure to also set the portal package, so that they are in sync
@@ -123,4 +176,55 @@
   };
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+  # Automatic Hyprland start up
+  programs.hyprland.withUWSM = true;
+
+  # For games
+  services.xserver.videoDrivers = [ "amdgpu" ];
+
+  programs.steam.enable = true;
+  programs.steam.gamescopeSession.enable = true;
+
+  programs.gamemode.enable = true;
+
+  # Virtual Machines
+  programs.virt-manager.enable = true;
+
+  users.groups.libvirtd.members = [ "user" ];
+
+  virtualisation.libvirtd.enable = true;
+
+  virtualisation.spiceUSBRedirection.enable = true;
+  
+  # Bluetooth
+  hardware.bluetooth.enable = true;
+
+  hardware.bluetooth.powerOnBoot = true;
+
+  services.blueman.enable = true;
+
+  # nvim NVF
+
+  programs.nvf = {
+    enable = true;
+    settings = {
+      vim.theme = {
+        enable = true;
+	name = "gruvbox";
+	style = "dark";
+      };
+
+      vim.autocomplete.nvim-cmp.enable = true;
+
+      vim.languages = {
+        enableLSP = true;
+	enableTreesitter = true;
+
+	nix.enable = true;
+	clang.enable = true;
+      };
+      
+    };
+  };
 }
