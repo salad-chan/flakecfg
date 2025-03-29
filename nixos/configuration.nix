@@ -75,6 +75,7 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
   #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+  
   #  wget
   # Base
     git
@@ -109,8 +110,7 @@
     hyprlang
 
   # Screenshot utils
-    grim
-    slurp
+    hyprshot
 
   # Fonts and etc.
     font-awesome
@@ -127,6 +127,13 @@
     zed-editor
     vlc
     qbittorrent
+    zoom-us
+    google-chrome
+    geeqie
+
+  # For zoom 
+    xdg-desktop-portal
+    xdg-desktop-portal-hyprland
   ];
 
   # Enabling Programs here instead of in packages
@@ -181,8 +188,6 @@
   programs.hyprland.withUWSM = true;
 
   # For games
-  services.xserver.videoDrivers = [ "amdgpu" ];
-
   programs.steam.enable = true;
   programs.steam.gamescopeSession.enable = true;
 
