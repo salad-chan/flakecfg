@@ -22,6 +22,9 @@
   # AMD gpu driver
   boot.initrd.kernelModules = [ "amdgpu" ];
 
+  services.xserver.videoDrivers = [ "amdgpu" ]; # to load the amdgpu kernel module
+
+  hardware.graphics.enable = true;
   networking.hostName = "system"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
@@ -31,6 +34,11 @@
 
   # Enable networking
   networking.networkmanager.enable = true;
+  
+  # Bluetooth
+  hardware.bluetooth.enable = true;
+  hardware.bluetooth.powerOnBoot = true;
+  services.blueman.enable = true;
 
   # Set your time zone.
   time.timeZone = "America/New_York";
@@ -80,17 +88,13 @@
   # Base
     git
   # neovim # using NVF right now
-
+  
   # Hyprland
-    kitty
+    alacritty
 
-  # Basic Hypr Eco system
-    dunst
-    pipewire
-    wireplumber
+  # Hypr Eco system
+    swaynotificationcenter
     hyprpolkitagent
-
-  # Additions to hypr
     rofi-wayland
     copyq
     kdePackages.dolphin
@@ -108,13 +112,11 @@
     hyprsysteminfo
     hyprsunset
     hyprlang
+    hyprpaper
+    hyprpicker
 
   # Screenshot utils
     hyprshot
-
-  # Fonts and etc.
-    font-awesome
-    nerd-fonts.zed-mono
 
   # Sound GUI
     pavucontrol
@@ -124,16 +126,26 @@
     keepassxc
     obsidian
     vesktop
-    zed-editor
     vlc
     qbittorrent
-    zoom-us
     google-chrome
     geeqie
-
+  
+  # For games
+    lutris
+    protonup-qt
+    mangohud
+  
   # For zoom 
+    zoom-us
     xdg-desktop-portal
     xdg-desktop-portal-hyprland
+  ];
+
+  fonts.packages = with pkgs; [
+    font-awesome
+    nerd-fonts.arimo
+    noto-fonts
   ];
 
   # Enabling Programs here instead of in packages
@@ -168,7 +180,6 @@
 
   programs.hyprland = {
     enable = true;
-    # I dont know if i need this
     xwayland.enable = true;
     # set the flake package
     package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
@@ -183,9 +194,6 @@
   };
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
-
-  # Automatic Hyprland start up
-  programs.hyprland.withUWSM = true;
 
   # For games
   programs.steam.enable = true;
@@ -202,13 +210,6 @@
 
   virtualisation.spiceUSBRedirection.enable = true;
   
-  # Bluetooth
-  hardware.bluetooth.enable = true;
-
-  hardware.bluetooth.powerOnBoot = true;
-
-  services.blueman.enable = true;
-
   # nvim NVF
 
   programs.nvf = {
@@ -216,12 +217,14 @@
     settings = {
       vim.theme = {
         enable = true;
-	name = "gruvbox";
+	name = "oxocarbon";
 	style = "dark";
       };
 
-      vim.autocomplete.nvim-cmp.enable = true;
+      vim.lineNumberMode = "number";
 
+      vim.autocomplete.nvim-cmp.enable = true;
+      
       vim.languages = {
         enableLSP = true;
 	enableTreesitter = true;
@@ -230,6 +233,26 @@
 	clang.enable = true;
       };
       
+      vim.options.tabstop = 4;
+      vim.options.shiftwidth = 4;
+      vim.options.expandtab = true;
     };
   };
+
+  # Tablet
+  hardware.opentabletdriver.enable = true;
+
+  # Premissons for tablet
+  services.udev.extraRules = ''
+  SUBSYSTEM=="usb", ATTR{idVendor}=="256c", ATTR{idProduct}=="006d", OWNER="user", MODE="0660"
+'';
+
+  # PipeWire
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;    # optional, but often desired
+    jack.enable = true;    # optional, but often desired
+    pulse.enable = true;   # optional, but often desired
+  };
+  
 }
