@@ -67,7 +67,7 @@
   users.users.user = {
     isNormalUser = true;
     description = "user";
-    extraGroups = [ "networkmanager" "wheel" "input" ];
+    extraGroups = [ "networkmanager" "wheel" "input" "libvirtd" ];
     packages = with pkgs; [];
     initialHashedPassword = "$y$j9T$SbIfG.PMqcppUk8LBe1q9.$JSEjQHCANc3fBwDx92NhTP71lkurNUS9EUAPKRUHAD7";
   };
@@ -132,7 +132,6 @@
     geeqie
   
   # For games
-    lutris
     protonup-qt
     mangohud
   
@@ -202,13 +201,13 @@
   programs.gamemode.enable = true;
 
   # Virtual Machines
-  programs.virt-manager.enable = true;
-
-  users.groups.libvirtd.members = [ "user" ];
-
   virtualisation.libvirtd.enable = true;
-
+  programs.virt-manager.enable = true;
+  
   virtualisation.spiceUSBRedirection.enable = true;
+
+  services.qemuGuest.enable = true;
+  services.spice-vdagentd.enable = true;
   
   # nvim NVF
 

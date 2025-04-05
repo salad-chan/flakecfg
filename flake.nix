@@ -15,7 +15,6 @@
     };
 
     nvf.url = "github:notashelf/nvf";
-
   };
 
   outputs = { self, nixpkgs, nvf, ... }@inputs: {
@@ -24,7 +23,7 @@
     nixosConfigurations.system = nixpkgs.lib.nixosSystem {
       specialArgs = {inherit inputs;};
       modules = [
-	nvf.nixosModules.default
+	    nvf.nixosModules.default
         ./nixos/configuration.nix
         # inputs.home-manager.nixosModules.default
       ];
